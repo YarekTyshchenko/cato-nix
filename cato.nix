@@ -2,7 +2,6 @@
   stdenv,
   fetchurl,
   dpkg,
-  tree,
   lib,
   libz,
   autoPatchelfHook,
@@ -10,35 +9,39 @@
 
 stdenv.mkDerivation {
   pname = "cato";
-  version = "0.0.0";
+  version = "0.1.0";
 
   src = fetchurl {
     url = "https://clientdownload.catonetworks.com/public/clients/cato-client-install.deb";
     sha256 = "sha256-0hUchaxaiKJth2ByQMFfjsCLi/4kl+SrNSQ33Y6r3WA=";
   };
 
-  unpackPhase = "true";
+  dontConfigure = true;
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg ];
 
-  buildInputs = [
-    stdenv.cc.cc.lib
-    libz
+  buildInputs = [ libz stdenv.cc.cc ];
 
-    dpkg
-    tree
-  ];
+  unpackPhase = ''
+    runHook preUnpack
+    dpkg -x $src source
+    cd source
+    runHook postUnpack
+  '';
 
   installPhase = ''
     runHook preInstall
+    mkdir $out
+    mv etc $out/etc
 
-    mkdir -p $out
-    dpkg -x $src $out
+    mv usr/lib $out/lib
+    mv lib/systemd $out/lib/systemd
 
-    tree $out
+    mkdir -p $out/bin
+    mv usr/sbin/* $out/bin
+    mv usr/bin/* $out/bin
 
-    cp -av $out/usr/* $out
-
+    mv ./usr/local/share $out/share
     runHook postInstall
   '';
 
