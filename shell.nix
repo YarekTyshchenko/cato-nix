@@ -4,6 +4,6 @@
 
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
-    (callPackage ./cato.nix {})
+    (callPackage ./default.nix {})
   ];
 }

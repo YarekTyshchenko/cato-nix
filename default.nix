@@ -36,6 +36,8 @@ stdenv.mkDerivation {
 
     mv usr/lib $out/lib
     mv lib/systemd $out/lib/systemd
+    substituteInPlace "$out/lib/systemd/system/cato-client.service" --replace /usr/sbin/ "$out/bin/"
+    cat "$out/lib/systemd/system/cato-client.service"
 
     mkdir -p $out/bin
     mv usr/sbin/* $out/bin
