@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://clientdownload.catonetworks.com/public/clients/cato-client-install.deb";
-    sha256 = "sha256-0hUchaxaiKJth2ByQMFfjsCLi/4kl+SrNSQ33Y6r3WA=";
+    sha256 = "sha256-2vjMSwGaVwzHr0NjqEKOZHwZu99vW/Ro7WK5YK8T1BQ=";
   };
 
   dontConfigure = true;
